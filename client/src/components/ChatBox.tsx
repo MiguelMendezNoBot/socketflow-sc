@@ -11,33 +11,31 @@ interface Props {
 
 export default function ChatBox({ messages, currentUserId, onSendMessage, isConnected }: Props) {
   return (
-    <div className="flex flex-col h-[600px] w-full max-w-4xl bg-gray-900/50 backdrop-blur-md border border-gray-800 rounded-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-500">
+    <div className="flex flex-col h-[700px] w-full max-w-4xl bg-white brutalist-border brutalist-shadow overflow-hidden">
       {/* Header */}
-      <div className="px-6 py-4 bg-gray-900 border-b border-gray-800 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white shadow-lg shadow-blue-900/20">
-              SF
-            </div>
-            <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-gray-900 ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+      <div className="px-6 py-4 bg-black text-[#ffff00] border-b-4 border-black flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-[#ffff00] border-2 border-black flex items-center justify-center font-black text-black text-xl">
+            SF
           </div>
           <div>
-            <h1 className="text-sm font-bold text-white tracking-wide uppercase">SocketFlow SC</h1>
-            <p className="text-[10px] text-gray-500 font-medium">SISTEMA COLABORATIVO CORPORATIVO</p>
+            <h1 className="text-xl font-black uppercase tracking-tighter">SocketFlow_Terminal</h1>
+            <p className="text-[10px] font-bold">STATUS: {isConnected ? 'ONLINE_READY' : 'OFFLINE_DISCONNECTED'}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-gray-500 bg-gray-800 px-2 py-1 rounded border border-gray-700">
-            {isConnected ? 'EN LÍNEA' : 'DESCONECTADO'}
-          </span>
-        </div>
+        <div className={`w-6 h-6 border-4 border-black ${isConnected ? 'bg-[#ffff00]' : 'bg-red-600'}`}></div>
       </div>
 
       {/* Messages Area */}
-      <MessageList messages={messages} currentUserId={currentUserId} />
+      <div className="flex-1 bg-white flex flex-col min-h-0">
+        <MessageList messages={messages} currentUserId={currentUserId} />
+      </div>
 
       {/* Input Area */}
-      <MessageInput onSendMessage={onSendMessage} disabled={!isConnected} />
+      <div className="border-t-4 border-black">
+        <MessageInput onSendMessage={onSendMessage} disabled={!isConnected} />
+      </div>
     </div>
   )
-}
+}
+

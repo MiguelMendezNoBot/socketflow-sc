@@ -15,13 +15,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0c] text-white flex items-center justify-center p-4 selection:bg-blue-500/30">
-      {/* Background decoration */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[120px]"></div>
-      </div>
-
+    <div className="min-h-screen bg-[#ffff00] flex items-center justify-center p-4 font-mono">
       {showModal && currentUser && (
         <UsernameModal 
           onConfirm={handleConfirmName} 
@@ -39,13 +33,13 @@ function App() {
       )}
       
       {!currentUser && (
-        <div className="flex flex-col items-center gap-4 animate-pulse">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-500 font-medium">Estableciendo conexión segura...</p>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-8 border-black border-t-transparent animate-spin"></div>
+          <p className="text-black font-black uppercase text-xl">CONECTANDO AL NODO...</p>
         </div>
       )}
     </div>
   )
 }
 
-export default App
+export default App

@@ -18,15 +18,15 @@ export default function UsernameModal({ onConfirm, currentName }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 border border-gray-700 p-8 rounded-2xl shadow-2xl max-w-md w-full animate-in fade-in zoom-in duration-300">
-        <h2 className="text-3xl font-bold text-white mb-2 text-center">¡Bienvenido!</h2>
-        <p className="text-gray-400 text-center mb-8">Ingresa tu nombre para empezar a colaborar en tiempo real.</p>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center z-50 p-4">
+      <div className="bg-white border-4 border-black p-10 brutalist-shadow max-w-md w-full">
+        <h2 className="text-4xl font-black text-black mb-2 text-center uppercase tracking-tighter">WHO_ARE_YOU?</h2>
+        <p className="text-black font-bold text-center mb-10 border-b-2 border-black pb-4">ACCESSING_CORPORATE_NODE</p>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-medium text-gray-300 ml-1">
-              Nombre de usuario
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="space-y-4">
+            <label htmlFor="name" className="text-xs font-black text-black uppercase tracking-widest">
+              IDENTIFIER_NAME:
             </label>
             <input
               id="name"
@@ -34,23 +34,25 @@ export default function UsernameModal({ onConfirm, currentName }: Props) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={currentName}
-              className="w-full bg-gray-900 border border-gray-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-600"
+              className="w-full bg-white border-4 border-black text-black px-4 py-4 font-black focus:outline-none focus:bg-[#ffff00] transition-colors placeholder:text-gray-400"
               autoFocus
             />
           </div>
           
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl shadow-lg shadow-blue-900/20 transform active:scale-95 transition-all"
+            className="w-full bg-black hover:bg-[#ffff00] hover:text-black text-[#ffff00] font-black py-5 border-4 border-black uppercase tracking-widest brutalist-shadow-sm active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
           >
-            Confirmar y entrar
+            ESTABLISH_CONNECTION_{">"}
           </button>
+
         </form>
         
-        <p className="mt-6 text-xs text-center text-gray-500">
-          Si lo dejas vacío, se usará tu nombre temporal: <span className="text-gray-400 font-mono">{currentName}</span>
+        <p className="mt-10 text-[10px] text-center text-black font-black uppercase">
+          DEFAULT_ALIAS: <span className="bg-black text-[#ffff00] px-2 py-1">{currentName}</span>
         </p>
       </div>
     </div>
   )
-}
+}
+

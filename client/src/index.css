@@ -2,23 +2,30 @@
 
 @layer base {
   body {
-    @apply bg-[#0a0a0c] selection:bg-blue-500/30;
+    @apply bg-[#ffff00] text-black font-mono selection:bg-black selection:text-[#ffff00];
   }
 }
 
+.brutalist-border {
+  @apply border-2 border-black;
+}
+
+.brutalist-shadow {
+  box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+}
+
+.brutalist-shadow-sm {
+  box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+}
+
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  @apply bg-black;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #1f2937;
-  border-radius: 10px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #374151;
+  @apply bg-[#ffff00] border-2 border-black;
 }
