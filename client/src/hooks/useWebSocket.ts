@@ -12,7 +12,7 @@ export interface Message {
     name?: string
   }
 }
-
+//esta es una funcion que se encarga de la comunicacion con el servidor
 export function useWebSocket(url: string) {
   const [messages, setMessages] = useState<Message[]>([])
   const [isConnected, setIsConnected] = useState(false)
@@ -48,14 +48,11 @@ export function useWebSocket(url: string) {
     }
 
     return () => {
-      // Solo cerrar si el socket está en un estado que permite el cierre
       if (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING) {
         socket.close()
       }
     }
   }, [url])
-
-
   const sendMessage = useCallback((type: string, payload: any) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {
       socketRef.current.send(JSON.stringify({ type, payload }))
@@ -70,7 +67,7 @@ export function useWebSocket(url: string) {
   const sendChatMessage = useCallback((text: string) => {
     sendMessage('chat', { text })
   }, [sendMessage])
-
+  //aqui devolvemos los datos que necesita el componente App
   return {
     messages,
     isConnected,
@@ -78,4 +75,4 @@ export function useWebSocket(url: string) {
     setUserName,
     sendChatMessage
   }
-}
+}
