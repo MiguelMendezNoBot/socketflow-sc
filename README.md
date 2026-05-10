@@ -29,12 +29,15 @@ cd server
 npm install
 ```
 
+para instalar las dependecias eliminar los archivos package-lock.json, y node_modules dentro de client, por temas de versiones, o sistema operativo la ejecucion se rompe, ya despues de eliminar los 2 archios continuuar con la instalacion de las dependencias
+
 ### 3. Instalar dependencias del cliente
 
 ```bash
 cd ../client
 npm install
 ```
+para instalar las dependecias eliminar los archivos package-lock.json, y node_modules dentro de client, por temas de versiones, o sistema operativo la ejecucion se rompe, ya despues de elimar los 2 archios continuuar con la instalacion de las dependencias
 
 ## Cómo correr el proyecto
 
