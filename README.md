@@ -4,7 +4,7 @@ Sistema de chat colaborativo en tiempo real construido con WebSockets.
 
 ## Requisitos previos
 
-- [Node.js](https://nodejs.org/) v18 o superior
+- [Node.js](https://nodejs.org/) v20 o superior
 - npm (viene incluido con Node.js)
 
 ## Estructura del proyecto
