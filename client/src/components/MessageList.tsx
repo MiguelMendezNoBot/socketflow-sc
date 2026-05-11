@@ -23,82 +23,79 @@ export default function MessageList({ mensajes, username }: Props) {// username 
   return (
     <div
       style={{
-        border: "1px solid gray",
-
         height: "550px",
-        maxWidth: "800px",
-        margin: "0 auto",
         overflowY: "auto",
-        padding: "10px",
+        padding: "15px",
         marginBottom: "10px",
         display: "flex",
         flexDirection: "column",
-        gap: "10px",
-        backgroundColor: "transparent",
-        backdropFilter: "blur(8px)",
-        borderRadius: "15px",
+        gap: "12px",
+        backgroundColor: "#ffffff",
+        borderRadius: "12px",
+        border: "1px solid #e5e7eb",
       }}
     >
-       {mensajes.map((msg, index) => {
-
-        const esMio = msg.usuario === username; // todo el codigo se actualizo para 
-        
+      {mensajes.map((msg, index) => {
+        const esMio = msg.usuario === username;
 
         // Mensajes del sistema
         if (msg.tipo === "sistema") {
           return (
             <div
-                key={index}
-                style={{
-                  textAlign: "center",
-                  color: "rgb(248, 248, 248)", // color de los mensajes del sistema
-                  fontStyle: "italic",
-                }}
-              >
-                {msg.mensaje}
-              </div>
-            );
-          }
-        
+              key={index}
+              style={{
+                textAlign: "center",
+                color: "#6b7280",
+                fontSize: "12px",
+                margin: "8px 0",
+                fontStyle: "italic",
+              }}
+            >
+              {msg.mensaje}
+            </div>
+          );
+        }
 
         return (
           <div
             key={index}
             style={{
               display: "flex",
-              justifyContent: esMio
-                ? "flex-end"
-                : "flex-start",
+              justifyContent: esMio ? "flex-end" : "flex-start",
             }}
           >
             <div
               style={{
-                backgroundColor: esMio
-                  ? "#05f585"// ei el mensaje es mio lo muestro con un fondo verde
-                  : "white", // si el mensaje no es mio lo muestro con un fondo blanco
-
-                padding: "10px",
-                borderRadius: "10px",
-                maxWidth: "70%",
-                boxShadow: "0 1px 2px rgb(230, 20, 20)",
+                backgroundColor: esMio ? "#4f46e5" : "#f3f4f6",
+                color: esMio ? "#ffffff" : "#1f2937",
+                padding: "10px 14px",
+                borderRadius: esMio ? "12px 12px 2px 12px" : "12px 12px 12px 2px",
+                maxWidth: "75%",
+                boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                fontSize: "14px",
               }}
             >
               {!esMio && (
-                <strong>
+                <strong
+                  style={{
+                    display: "block",
+                    fontSize: "12px",
+                    color: "#4f46e5",
+                    marginBottom: "4px",
+                  }}
+                >
                   {msg.usuario}
                 </strong>
               )}
 
-              <div>
-                {msg.mensaje}
-              </div>
+              <div style={{ lineHeight: "1.5" }}>{msg.mensaje}</div>
 
               <div
                 style={{
-                  fontSize: "11px",
+                  fontSize: "10px",
                   textAlign: "right",
-                  color: "rgba(0, 0, 0, 0.7)", // color de la hora
-                  marginTop: "5px",
+                  color: esMio ? "rgba(255, 255, 255, 0.8)" : "#9ca3af",
+                  marginTop: "4px",
                 }}
               >
                 {msg.hora}
@@ -110,6 +107,7 @@ export default function MessageList({ mensajes, username }: Props) {// username 
 
       <div ref={bottomRef} />
     </div>
+
   );
 }
 //chat

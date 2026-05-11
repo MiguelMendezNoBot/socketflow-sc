@@ -1,68 +1,100 @@
 
 import "./index.css";
-import fondo from "./assets/fondo.jpg"; 
 import HistoryPanel from "./components/HistoryPanel"; 
 import ChatBox from "./components/ChatBox";
+import UsernameModal from "./components/UsernameModal";
 import { useState } from "react"; 
 import { useWebSocket } from "./hooks/useWebSocket";
 
 function App() {
-  const [mostrarHistorial, setMostrarHistorial] =useState(false); 
+  const [nombreConfirmado, setNombreConfirmado] = useState(false);
+  const [chosenName, setChosenName] = useState<string | undefined>(undefined);
+  const [mostrarHistorial, setMostrarHistorial] = useState(false);
   const {
     mensajes,
     historial,
     enviarMensaje,
-    cargarHistorial, 
+    cargarHistorial,
     username,
     estado,
-  } = useWebSocket();//variable para mostrar el estado de la conexión
+  } = useWebSocket(chosenName);
+
+  // Si no ha confirmado su nombre, mostramos el modal primero
+  if (!nombreConfirmado) {
+    return (
+      <UsernameModal
+        onConectar={(nombre) => {
+          setChosenName(nombre);
+          setNombreConfirmado(true);
+        }}
+      />
+    );
+  }
+
+
 
   
   return (
-        <div
+    <div
+      style={{
+        backgroundColor: "#f0f2f5",
+        minHeight: "100vh",
+        padding: "20px",
+        fontFamily: "'Inter', sans-serif",
+      }}
+    >
+      {" "}
+      {/* CONTENEDOR PRINCIPAL */}
+      <div
         style={{
-          backgroundImage: `url(${fondo})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-
-          minHeight: "100vh",
-
+          width: "100%",
+          maxWidth: "1100px",
+          margin: "0 auto",
           padding: "20px",
+          backgroundColor: "#ffffff",
+          borderRadius: "16px",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
         }}
-        > {/* CONTENEDOR PRINCIPAL */}
-          <div
+      >
+        <h1 style={{ color: "#1f2937", marginBottom: "10px" }}>SocketFlow Chat</h1>
+
+        <p
+          style={{
+            color:
+              estado === "conectado"
+                ? "#059669"
+                : estado === "conectando"
+                ? "#d97706"
+                : "#dc2626",
+            fontWeight: "600",
+            marginBottom: "16px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
+        >
+          <span
             style={{
-              width: "100%",
-              maxWidth: "1100px",
-
-              padding: "10px 20px",
-
-              boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+              width: "8px",
+              height: "8px",
+              borderRadius: "50%",
+              backgroundColor:
+                estado === "conectado"
+                  ? "#059669"
+                  : estado === "conectando"
+                  ? "#d97706"
+                  : "#dc2626",
             }}
-          >
-            <h1 style={{ color: "white" }}>Chat WebSocket</h1>
-
-            <p
-              style={{
-                color:
-                  estado === "conectado"
-                    ? "#00ff88"
-                    : estado === "conectando"
-                    ? "orange"
-                    : "red",
-                fontWeight: "bold",
-                marginBottom: "8px",
-              }}
-          >
-            {estado === "conectado" && "🟢 Conectado"}
-            {estado === "conectando" && "🟡 Conectando..."}
-            {estado === "desconectado" && "🔴 Desconectado — tu servidor no esta corriendo"}
-            {estado === "error" && "🔴 Error de conexión — revisá la consola"}
-          </p>
-          <h3>
-            Conectado como: {username}
-          </h3>
+          ></span>
+          {estado === "conectado" && "Conectado"}
+          {estado === "conectando" && "Conectando..."}
+          {estado === "desconectado" &&
+            "Desconectado — tu servidor no esta corriendo"}
+          {estado === "error" && "Error de conexión — revisá la consola"}
+        </p>
+        <h3 style={{ color: "#4b5563", marginBottom: "20px" }}>
+          Usuario: {username}
+        </h3>
 
           <button 
              onClick={() => { // boton de historial
@@ -74,30 +106,31 @@ function App() {
               );
             }}
             style={{
-              marginBottom: "15px",
-              padding: "10px 15px",
-              borderRadius: "8px",
+              marginBottom: "20px",
+              padding: "10px 24px",
+              borderRadius: "12px",
               border: "none",
               cursor: "pointer",
-              backgroundColor: "#9225eb",
+              backgroundColor: "#4f46e5",
               color: "white",
-              fontWeight: "bold"
+              fontWeight: "600",
+              fontSize: "14px",
+              transition: "all 0.2s",
             }}
           >
              {mostrarHistorial 
               ? "Ocultar historial"
               : "Cargar historial"}
-          </button> 
-          //fin del  boton para cargar historial
+          </button>
                {/* CHAT */}
         <div
-          style={{ // ajuste cuadro de chat
-            backgroundColor: "transparent",
-            backdropFilter: "blur(6px)",
-            borderRadius: "15px",
-            padding: "15px",
-            maxWidth: "800px",
+          style={{
+            backgroundColor: "#f9fafb",
+            borderRadius: "16px",
+            padding: "24px",
+            maxWidth: "900px",
             margin: "0 auto",
+            border: "1px solid #e5e7eb",
           }}
         >
           

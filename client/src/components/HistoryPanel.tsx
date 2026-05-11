@@ -12,63 +12,60 @@ export default function HistoryPanel({
     <div
       style={{
         width: "300px",
-
         height: "550px",
-
         overflowY: "auto",
-
-        padding: "15px",
-
-        borderRadius: "15px",
-
-        backgroundColor:
-          "rgba(255,255,255,0.08)",
-
-        backdropFilter: "blur(8px)",
-
-        color: "white",
+        padding: "20px",
+        borderRadius: "16px",
+        backgroundColor: "#ffffff",
+        border: "1px solid #e5e7eb",
+        color: "#1f2937",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.04)",
       }}
     >
-
       <h3
         style={{
           marginTop: 0,
-          marginBottom: "15px",
+          marginBottom: "20px",
+          fontSize: "18px",
+          color: "#111827",
         }}
       >
         Historial
       </h3>
 
       {historial.length === 0 ? (
-
-        <p>No hay historial</p>
-
+        <p style={{ color: "#9ca3af", fontSize: "14px" }}>No hay historial</p>
       ) : (
-
         historial.map((msg, index) => (
-
           <div
             key={index}
             style={{
-              marginBottom: "12px",
-
-              paddingBottom: "10px",
-
-              borderBottom:
-                "1px solid rgba(255,255,255,0.1)",
+              marginBottom: "16px",
+              paddingBottom: "12px",
+              borderBottom: "1px solid #f3f4f6",
             }}
           >
-            <strong>
+            <strong
+              style={{
+                display: "block",
+                fontSize: "13px",
+                color: "#4f46e5",
+                marginBottom: "4px",
+              }}
+            >
               {msg.usuario}
             </strong>
 
-            <div>
+            <div style={{ fontSize: "14px", lineHeight: "1.4" }}>
               {msg.mensaje}
             </div>
 
             <small
               style={{
-                opacity: 0.7,
+                display: "block",
+                fontSize: "11px",
+                color: "#9ca3af",
+                marginTop: "6px",
               }}
             >
               {msg.hora}

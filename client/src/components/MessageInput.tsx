@@ -24,7 +24,7 @@ export default function MessageInput({ onSend }: Props) {
     }
   };
   return (
-    <div style={{ display: "flex", gap: "10px" }}>
+    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
       <input
         type="text"
         value={mensaje}
@@ -33,24 +33,33 @@ export default function MessageInput({ onSend }: Props) {
         onKeyDown={handleKeyDown}
         style={{
           flex: 1,
-          padding: "10px",
+          padding: "12px 16px",
+          borderRadius: "12px",
+          border: "1px solid #e5e7eb",
+          outline: "none",
+          fontSize: "14px",
+          backgroundColor: "#ffffff",
+          color: "#1f2937",
         }}
       />
 
       <button onClick={enviar}
-        style={{  //  estyle es para darle estilos 
-          backgroundColor: "#078061",
+        style={{
+          backgroundColor: "#4f46e5",
           color: "white",
           border: "none",
-          padding: "10px 18px",
-          borderRadius: "10px",
+          padding: "10px 24px",
+          borderRadius: "12px",
           cursor: "pointer",
-          fontWeight: "bold",
+          fontWeight: "600",
+          fontSize: "14px",
+          transition: "all 0.2s",
         }}
       >
         Enviar
       </button>
     </div>
+
   );
 }
 // chat
