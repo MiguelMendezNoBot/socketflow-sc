@@ -1,10 +1,12 @@
 import express from 'express'
 import { createServer } from 'http'
-import WebSocket, { WebSocketServer } from 'ws' // este es el paquete correcto para WebSocketServer 
+import WebSocket, { WebSocketServer } from 'ws' 
+import url from 'url'
 
 const app = express()
 const httpServer = createServer(app)
 const wss = new WebSocketServer({ server: httpServer })
+
 
 const PORT = Number(process.env.PORT ?? 3000)
 const HOST = process.env.HOST ?? '0.0.0.0'
@@ -17,12 +19,8 @@ interface ClienteWebSocket extends WebSocket {
   username?: string
 }
 
-// Generar nombre automático
-function generarNombreUsuario() {
-  return `Usuario_${Math.floor(Math.random() * 1000)}`
-}
-
 // Enviar mensaje a todos los clientes conectados
+
 function enviarATodos(data: any) {
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
@@ -32,12 +30,17 @@ function enviarATodos(data: any) {
 }
 
 // Conexión WebSocket
-wss.on('connection', (ws: ClienteWebSocket) => {
+wss.on('connection', (ws: ClienteWebSocket, req) => {
+  // Leer nombre de la URL (ej: ws://localhost:3000?username=Fabio)
+  const parameters = url.parse(req.url || '', true).query;
+  const nombreQuery = parameters.username as string;
 
-  // Asignar nombre automático
-  ws.username = generarNombreUsuario()
+  // Asignar nombre: el de la URL o uno por defecto
+  ws.username = nombreQuery || "Invitado"
 
-  console.log(`${ws.username} conectado felizmente`)
+
+  console.log(`Conexión establecida: ${ws.username}`)
+
 
   // Enviar nombre al cliente conectado
   ws.send(
@@ -53,60 +56,59 @@ wss.on('connection', (ws: ClienteWebSocket) => {
     mensaje: `${ws.username} se unió al chat`
   })
 
-  // Recibir mensajes
-  ws.on('message', (data: Buffer) => {// se actualizo para guardar el historial de mensajes antes de enviarlo a todos, aunque no se pidió explícitamente, es útil para que los nuevos clientes puedan recibir los mensajes anteriores al conectarse. Se podría mejorar guardando solo los últimos N mensajes o guardándolos en una base de datos si se quisiera persistencia a largo plazo. Por ahora, esto es suficiente para el ejercicio.
-
+  // Manejo de mensajes entrantes
+  ws.on('message', (data: Buffer) => {
     const mensajeRecibido = JSON.parse(data.toString())
 
-    // solicitar el historial
-    if (mensajeRecibido.tipo === 'historial') { // guardar el historial de mensajes antes de enviarlo a todos, aunque no se pidió explícitamente, es útil para que los nuevos clientes puedan recibir los mensajes anteriores al conectarse. Se podría mejorar guardando solo los últimos N mensajes o guardándolos en una base de datos si se quisiera persistencia a largo plazo. Por ahora, esto es suficiente para el ejercicio.
+    // Handler para cambio de nombre
+    if (mensajeRecibido.tipo === "setUsername") {
+      const nombreAnterior = ws.username;
+      ws.username = mensajeRecibido.username || ws.username;
+      console.log(`Cambio de nombre: ${nombreAnterior} -> ${ws.username}`);
 
-      ws.send(
-        JSON.stringify({
-          tipo: 'historial',
-          mensajes: historialMensajes
-        })
-      )
-
-      return
-    } //termin el if para guardar el historial de mensajes antes de enviarlo a todos, aunque no se pidió explícitamente, es útil para que los nuevos clientes puedan recibir los mensajes anteriores al conectarse. Se podría mejorar guardando solo los últimos N mensajes o guardándolos en una base de datos si se quisiera persistencia a largo plazo. Por ahora, esto es suficiente para el ejercicio.
-
-    console.log(
-      `Mensaje de ${ws.username}:`, mensajeRecibido.mensaje
-    )
-
-    // enviar un solo mensaje y guardar historial 
-    const nuevoMensaje = {  // desde aqui para guardar el historiañl de mensajes antes de enviarlo a todos, aunque no se pidió explícitamente, es útil para que los nuevos clientes puedan recibir los mensajes anteriores al conectarse. Se podría mejorar guardando solo los últimos N mensajes o guardándolos en una base de datos si se quisiera persistencia a largo plazo. Por ahora, esto es suficiente para el ejercicio.
-    tipo: 'chat',
-    usuario: ws.username,
-    mensaje: mensajeRecibido.mensaje,
-    hora: new Date().toLocaleTimeString()
+      ws.send(JSON.stringify({ tipo: "usuario", username: ws.username }));
+      enviarATodos({ tipo: "sistema", mensaje: `${nombreAnterior} ahora es ${ws.username}` });
+      return;
     }
 
-      // Guardar historial
-    historialMensajes.push(nuevoMensaje)
+    // Handler para solicitud de historial
+    if (mensajeRecibido.tipo === 'historial') {
+      ws.send(JSON.stringify({ tipo: 'historial', mensajes: historialMensajes }));
+      return;
+    }
 
-      // Enviar a todos
-    enviarATodos(nuevoMensaje) // hasta aqui para guardar el historial de mensajes antes de enviarlo a todos, aunque no se pidió explícitamente, es útil para que los nuevos clientes puedan recibir los mensajes anteriores al conectarse. Se podría mejorar guardando solo los últimos N mensajes o guardándolos en una base de datos si se quisiera persistencia a largo plazo. Por ahora, esto es suficiente para el ejercicio.
+    console.log(`Mensaje de ${ws.username}:`, mensajeRecibido.mensaje)
+
+    // Crear y distribuir nuevo mensaje de chat
+    const nuevoMensaje = {
+      tipo: 'chat',
+      usuario: ws.username,
+      mensaje: mensajeRecibido.mensaje,
+      hora: new Date().toLocaleTimeString()
+    }
+
+    historialMensajes.push(nuevoMensaje)
+    enviarATodos(nuevoMensaje)
   })
 
-  // Desconexión
+  // Manejo de desconexión
   ws.on('close', () => {
-
-    console.log(`${ws.username} desconectado`)
-
-    // Notificar desconexión
+    console.log(`Desconexión: ${ws.username}`)
     enviarATodos({
       tipo: 'sistema',
       mensaje: `${ws.username} salió del chat`
     })
   })
+
 })
 
-// Ruta simple HTTP
+
+
+
+// Health check del servidor
 app.get('/', (_req, res) => {
-  res.send('Servidor WebSocket funcionando')
-})
+  res.send({ status: "ok", service: "SocketFlow Server" });
+});
 
 // Iniciar servidor
 httpServer.listen(PORT, HOST, () => {

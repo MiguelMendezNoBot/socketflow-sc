@@ -12,29 +12,74 @@ interface Props {
 const UsernameModal: React.FC<Props> = ({ onConectar }) => {
   const [nombre, setNombre] = useState('');
 
+  // Decodificar el token de Google (JWT) sin librerías
+  const decodeGoogleToken = (token: string) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      return null;
+    }
+  };
+
+  React.useEffect(() => {
+    /* global google */
+    if (typeof window !== 'undefined' && (window as any).google) {
+      (window as any).google.accounts.id.initialize({
+        client_id: "98281127419-jspug5udv75pr3vguve0t4jlf3p9r6kb.apps.googleusercontent.com", 
+        callback: (response: any) => {
+          const userData = decodeGoogleToken(response.credential);
+          if (userData && userData.name) {
+            onConectar(userData.name);
+          }
+        },
+      });
+      (window as any).google.accounts.id.renderButton(
+        document.getElementById("googleBtn"),
+        { theme: "outline", size: "large", width: "100%" }
+      );
+    }
+  }, [onConectar]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (nombre.trim()) {
-      onConectar(nombre.trim());
+    const nombreFinal = nombre.trim();
+    if (nombreFinal) {
+      console.log("Entrando con nombre manual:", nombreFinal);
+      onConectar(nombreFinal);
     }
   };
 
   return (
     <div style={styles.overlay}>
       <div style={styles.modal}>
-        <h2 style={styles.title}>💬 Chat Colaborativo</h2>
-        <p style={styles.subtitle}>Ingresa tu nombre para unirte al chat</p>
+        <h2 style={styles.title}>SocketFlow Chat</h2>
+        <p style={styles.subtitle}>Identifícate para comenzar a chatear</p>
+        
+        <div id="googleBtn" style={{ marginBottom: '24px' }}></div>
+
+        <div style={styles.divider}>
+          <span style={styles.dividerText}>O INGRESA MANUALMENTE</span>
+        </div>
+
         <form onSubmit={handleSubmit} style={styles.form}>
           <input
             type="text"
-            placeholder="Tu nombre"
+            placeholder="Tu nombre o apodo"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             autoFocus
             style={styles.input}
           />
           <button type="submit" style={styles.button}>
-            Unirse al Chat
+            Confirmar e Ingresar
           </button>
         </form>
       </div>
@@ -42,59 +87,89 @@ const UsernameModal: React.FC<Props> = ({ onConectar }) => {
   );
 };
 
+
 const styles: { [key: string]: React.CSSProperties } = {
   overlay: {
-    position: 'fixed',
+    position: "fixed",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(17, 24, 39, 0.4)",
+    backdropFilter: "blur(4px)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     zIndex: 1000,
   },
-  modal: { // no se hizo ninun cambio
-    backgroundColor: 'white',
-    borderRadius: '16px',
-    padding: '32px',
-    width: '90%',
-    maxWidth: '400px',
-    textAlign: 'center',
-    boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+  modal: {
+    backgroundColor: "#ffffff",
+    borderRadius: "20px",
+    padding: "40px",
+    width: "90%",
+    maxWidth: "400px",
+    textAlign: "center",
+    boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
   },
   title: {
-    margin: '0 0 8px 0',
-    color: '#075e54',
+    margin: "0 0 8px 0",
+    color: "#111827",
+    fontSize: "24px",
+    fontWeight: "700",
   },
   subtitle: {
-    margin: '0 0 24px 0',
-    color: '#666',
+    margin: "0 0 32px 0",
+    color: "#6b7280",
+    fontSize: "14px",
+  },
+  divider: {
+    display: "flex",
+    alignItems: "center",
+    margin: "24px 0",
+    color: "#9ca3af",
+  },
+  dividerText: {
+    padding: "0 10px",
+    fontSize: "10px",
+    fontWeight: "700",
+    letterSpacing: "1px",
+    whiteSpace: "nowrap",
+    width: "100%",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "10px",
   },
   form: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: '16px',
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "20px",
   },
   input: {
-    padding: '12px 16px',
-    fontSize: '16px',
-    border: '1px solid #ddd',
-    borderRadius: '24px',
-    outline: 'none',
+    padding: "14px 20px",
+    fontSize: "15px",
+    border: "1px solid #e5e7eb",
+    borderRadius: "12px",
+    outline: "none",
+    backgroundColor: "#f9fafb",
+    color: "#1f2937",
+    transition: "all 0.2s",
   },
   button: {
-    padding: '12px 24px',
-    backgroundColor: '#075e54',
-    color: 'white',
-    border: 'none',
-    borderRadius: '24px',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
+    padding: "14px 24px",
+    backgroundColor: "#4f46e5",
+    color: "white",
+    border: "none",
+    borderRadius: "12px",
+    fontSize: "16px",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "all 0.2s",
+    boxShadow: "0 4px 12px rgba(79, 70, 229, 0.2)",
   },
 };
+
 
 export default UsernameModal;
 //chat
