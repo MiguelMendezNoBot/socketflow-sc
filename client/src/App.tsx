@@ -2,6 +2,7 @@
 import "./index.css";
 import fondo from "./assets/fondo.jpg"; 
 import HistoryPanel from "./components/HistoryPanel"; 
+import ChatBox from "./components/ChatBox";
 import { useState } from "react"; 
 import { useWebSocket } from "./hooks/useWebSocket";
 
@@ -12,6 +13,8 @@ function App() {
     historial,
     enviarMensaje,
     cargarHistorial, 
+    username,
+    estado,
   } = useWebSocket();//variable para mostrar el estado de la conexión
 
   

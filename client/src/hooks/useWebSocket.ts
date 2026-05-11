@@ -73,7 +73,7 @@ export function useWebSocket() {
     };
 
     // Error
-    ws.onerror = (error) => {
+    ws.onerror = () => {
       //console.log("Error WebSocket:", error);
       console.error("❌ Error WebSocket — ¿está corriendo el servidor en localhost:3000?");
       setEstado("error");// aumentado de claude
