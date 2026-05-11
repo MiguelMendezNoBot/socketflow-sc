@@ -1,37 +1,23 @@
-// TODO: HU-07 — mostrar UsernameModal al entrar
-// TODO: HU-06 — conectar al WebSocket usando useWebSocket
-// TODO: HU-09 — pasar mensajes al ChatBox
 
-/*function App() {
-  return (
-    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-      <p className="text-gray-400">SocketFlow SC — en construcción</p>
-    </div>
-  )
-}
-
-export default App*/
 import "./index.css";
-import fondo from "./assets/fondo.jpg"; // fondo de pantalla para el chat, esto es solo para darle un toque más agradable a la interfaz, no es necesario para el funcionamiento del chat pero mejora la experiencia visual. Se podría mejorar añadiendo un selector de fondos o permitiendo subir fondos personalizados, pero por ahora esto es suficiente para el ejercicio.
-import ChatBox from "./components/ChatBox";
-import HistoryPanel from "./components/HistoryPanel"; // para cargar el historial aparte
-import { useState } from "react"; // para cargar el historial aparte
+import fondo from "./assets/fondo.jpg"; 
+import HistoryPanel from "./components/HistoryPanel"; 
+import { useState } from "react"; 
 import { useWebSocket } from "./hooks/useWebSocket";
 
 function App() {
-  const [mostrarHistorial, setMostrarHistorial] =useState(false); // para ver el historial
+  const [mostrarHistorial, setMostrarHistorial] =useState(false); 
   const {
     mensajes,
-    historial, // para cargar el historial aparte
+    historial,
     enviarMensaje,
-    cargarHistorial, // para cargar el historial de mensajes antes de enviarlo a todos, aunque no se pidió explícitamente, es útil para que los nuevos clientes puedan recibir los mensajes anteriores al conectarse. Se podría mejorar guardando solo los últimos N mensajes o guardándolos en una base de datos si se quisiera persistencia a largo plazo. Por ahora, esto es suficiente para el ejercicio.
-    username, estado
-  } = useWebSocket();// estado es una variable que claude aumento para mostrar el estado de la conexión
+    cargarHistorial, 
+  } = useWebSocket();//variable para mostrar el estado de la conexión
 
   
   return (
         <div
-        style={{ // actualizado para fondo de pantalla para el chat, esto es solo para darle un toque más agradable a la interfaz, no es necesario para el funcionamiento del chat pero mejora la experiencia visual. Se podría mejorar añadiendo un selector de fondos o permitiendo subir fondos personalizados, pero por ahora esto es suficiente para el ejercicio.
+        style={{
           backgroundImage: `url(${fondo})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -47,10 +33,6 @@ function App() {
               width: "100%",
               maxWidth: "1100px",
 
-              //backgroundColor: "rgba(255,255,255,0.12)", eliminamos la caja grande
-              //backdropFilter: "blur(10px)",
-
-              //borderRadius: "20px",
               padding: "10px 20px",
 
               boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
@@ -80,7 +62,7 @@ function App() {
           </h3>
 
           <button 
-             onClick={() => { // boton para cargar el historial mejorado
+             onClick={() => { // boton de historial
 
               cargarHistorial();
 
@@ -99,15 +81,15 @@ function App() {
               fontWeight: "bold"
             }}
           >
-             {mostrarHistorial // para cargar historial
+             {mostrarHistorial 
               ? "Ocultar historial"
               : "Cargar historial"}
           </button> 
           //fin del  boton para cargar historial
                {/* CHAT */}
         <div
-          style={{
-            backgroundColor: "transparent", // para ajustar el segundo cuar¿drado  o contenedor
+          style={{ // ajuste cuadro de chat
+            backgroundColor: "transparent",
             backdropFilter: "blur(6px)",
             borderRadius: "15px",
             padding: "15px",
@@ -116,7 +98,7 @@ function App() {
           }}
         >
           
-          <div // SE añadio para cargar el historial, ultima mejora
+          <div
             style={{
               display: mostrarHistorial
                 ? "flex"
@@ -127,7 +109,7 @@ function App() {
             }}
           >
 
-          {mostrarHistorial && ( // tdo esto se aumento para cargar el historial
+          {mostrarHistorial && ( 
               <HistoryPanel
                 historial={ historial       
                 }
@@ -137,10 +119,10 @@ function App() {
             <ChatBox
               mensajes={mensajes}
               onSend={enviarMensaje}
-              username={username}  //esto es para que el ChatBox sepa quién es el usuario y pueda mostrarlo en los mensajes que envíe, además de diferenciar los mensajes propios de los ajenos
+              username={username}  
             />
             
-            </div>// fin del contenedor del chat, que incluye el HistoryPanel y el ChatBox, se podría mejorar añadiendo una barra lateral para el historial o permitiendo ocultar el historial para pantallas más pequeñas, pero por ahora esto es suficiente para el ejercicio.
+            </div>
           </div>
         </div>
     </div>
