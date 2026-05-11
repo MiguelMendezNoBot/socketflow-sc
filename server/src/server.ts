@@ -6,7 +6,8 @@ const app = express()
 const httpServer = createServer(app)
 const wss = new WebSocketServer({ server: httpServer })
 
-const PORT = 3000
+const PORT = Number(process.env.PORT ?? 3000)
+const HOST = process.env.HOST ?? '0.0.0.0'
 const historialMensajes: any[] = [] // esto guarda el historial globalmente para que quien sea pueda verlo 
 // TODO: HU-04 — manejar conexiones, desconexiones y nombres de usuario
 // TODO: HU-05 — recibir y reenviar mensajes a todos los clientes
@@ -108,8 +109,8 @@ app.get('/', (_req, res) => {
 })
 
 // Iniciar servidor
-httpServer.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`)
+httpServer.listen(PORT, HOST, () => {
+  console.log(`Servidor corriendo en http://${HOST}:${PORT}`)
 })
 
 //chat

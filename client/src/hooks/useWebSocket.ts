@@ -26,7 +26,10 @@ export function useWebSocket() {
 
   useEffect(() => {
     console.log("Creando websocket..."); // ultima modificacion para evitar mensajes repetidos 
-    const ws = new WebSocket("ws://localhost:3000");
+    const wsUrl =
+      import.meta.env.VITE_WS_URL ??
+      `ws://${window.location.hostname}:3000`;
+    const ws = new WebSocket(wsUrl);
 
     //conexion exitosa
     ws.onopen = () => {
