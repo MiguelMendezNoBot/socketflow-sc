@@ -1,3 +1,7 @@
+// TODO: HU-08 — campo de texto y botón de enviar
+// - no enviar mensajes vacíos
+// - limpiar el campo después de enviar
+// - enviar con Enter o con el botón
 import { useState } from "react";
 
 interface Props {
@@ -15,6 +19,7 @@ export default function MessageInput({ onSend }: Props) {
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {/*todo esto se aumento por claude */
     if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();// añadio chatgpt para no tenerrepetidos
       enviar();
     }
   };
@@ -25,15 +30,27 @@ export default function MessageInput({ onSend }: Props) {
         value={mensaje}
         placeholder="Escribe un mensaje..."
         onChange={(e) => setMensaje(e.target.value)}
+        onKeyDown={handleKeyDown}
         style={{
           flex: 1,
           padding: "10px",
         }}
       />
 
-      <button onClick={enviar}>
+      <button onClick={enviar}
+        style={{  //  estyle es para darle estilos 
+          backgroundColor: "#078061",
+          color: "white",
+          border: "none",
+          padding: "10px 18px",
+          borderRadius: "10px",
+          cursor: "pointer",
+          fontWeight: "bold",
+        }}
+      >
         Enviar
       </button>
     </div>
   );
 }
+// chat
