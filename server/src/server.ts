@@ -11,8 +11,7 @@ const wss = new WebSocketServer({ server: httpServer })
 const PORT = Number(process.env.PORT ?? 3000)
 const HOST = process.env.HOST ?? '0.0.0.0'
 const historialMensajes: any[] = [] // esto guarda el historial globalmente para que quien sea pueda verlo 
-// TODO: HU-04 — manejar conexiones, desconexiones y nombres de usuario
-// TODO: HU-05 — recibir y reenviar mensajes a todos los clientes
+
 // Interfaz para agregar username al socket
 
 interface ClienteWebSocket extends WebSocket {
@@ -21,6 +20,12 @@ interface ClienteWebSocket extends WebSocket {
 
 // Enviar mensaje a todos los clientes conectados
 
+/**
+ * Envía la información dada a todos los clientes actualmente
+ * conectados con un canal de comunicación abierto.
+ * 
+ * @param data Información o estructura a enviar a los clientes en formato JSON.
+ */
 function enviarATodos(data: any) {
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
@@ -105,7 +110,10 @@ wss.on('connection', (ws: ClienteWebSocket, req) => {
 
 
 
-// Health check del servidor
+/**
+ * Ruta de comprobación de estado (health check) para verificar que el servidor
+ * de Express está operativo y respondiendo peticiones HTTP.
+ */
 app.get('/', (_req, res) => {
   res.send({ status: "ok", service: "SocketFlow Server" });
 });
@@ -114,5 +122,4 @@ app.get('/', (_req, res) => {
 httpServer.listen(PORT, HOST, () => {
   console.log(`Servidor corriendo en http://${HOST}:${PORT}`)
 })
-
-//chat
+

@@ -1,8 +1,10 @@
-// TODO: HU-09 — lista de mensajes
-// - muestra cada mensaje con nombre de usuario y hora
-// - diferencia visualmente mensajes propios vs ajenos
-// - notificaciones de conexión/desconexión en estilo distinto
-// - scroll automático al último mensaje
+/**
+ * Renderiza la lista de mensajes en el chat y maneja el desplazamiento automático
+ * hacia el final cuando se reciben nuevos mensajes.
+ * 
+ * @param props.mensajes Arreglo de mensajes a renderizar.
+ * @param props.username Nombre de usuario actual para resaltar mensajes propios.
+ */
 import { useEffect, useRef } from "react";
 import type { Mensaje } from "../hooks/useWebSocket";
 

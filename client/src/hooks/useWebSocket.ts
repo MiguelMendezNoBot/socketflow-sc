@@ -1,8 +1,10 @@
-// TODO: HU-06 — hook que maneja la conexión WebSocket
-// - conectarse al servidor al montar
-// - manejar mensajes entrantes
-// - manejar desconexión y errores
-// - exponer función para enviar mensajes
+/**
+ * Hook personalizado para inicializar, gestionar y proveer acceso
+ * a una conexión WebSocket con el servidor de chat.
+ * 
+ * @param initialUsername Nombre de usuario con el que se establecerá la conexión.
+ * @returns Funciones y estados relacionados a la conexión y mensajería en tiempo real.
+ */
 import { useEffect, useState } from "react";
 
 export interface Mensaje {
@@ -83,18 +85,31 @@ export function useWebSocket(initialUsername?: string) {
     };
   }, [initialUsername]);
 
+  /**
+   * Envía un mensaje de texto plano a través del WebSocket activo.
+   * 
+   * @param mensaje Contenido del mensaje a enviar.
+   */
   const enviarMensaje = (mensaje: string) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify({ mensaje }));
     }
   };
 
+  /**
+   * Solicita al servidor el envío del historial completo de mensajes.
+   */
   const cargarHistorial = () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(JSON.stringify({ tipo: "historial" }))
       }
   };
 
+  /**
+   * Solicita al servidor actualizar el nombre de usuario de la conexión actual.
+   * 
+   * @param nuevoNombre El nuevo nombre de usuario deseado.
+   */
   const cambiarNombre = (nuevoNombre: string) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(

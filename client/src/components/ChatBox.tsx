@@ -1,6 +1,11 @@
-// TODO: HU-09 — contenedor principal del chat
-// - incluye MessageList y MessageInput
-// - recibe los mensajes y la función de envío como props
+/**
+ * Renderiza el contenedor principal del chat, integrando la lista de mensajes
+ * y el campo de entrada de texto.
+ *
+ * @param props.mensajes Historial de mensajes a mostrar en la interfaz.
+ * @param props.onSend Función invocada al enviar un nuevo mensaje.
+ * @param props.username Nombre del usuario actual para diferenciar sus mensajes.
+ */
 import MessageInput from "./MessageInput";
 import MessageList from "./MessageList";
 
