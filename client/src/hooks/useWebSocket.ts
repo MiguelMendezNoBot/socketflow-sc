@@ -68,7 +68,7 @@ export function useWebSocket(initialUsername?: string) {
 
     // Error
     ws.onerror = () => {
-      console.error("Error WebSocket — ¿está corriendo el servidor en localhost:3000?");
+      console.error("Error WebSocket — ¿está corriendo el servidor?");
       setEstado("error");
     };
 

@@ -93,7 +93,7 @@ function App() {
           {estado === "conectado" && "Conectado"}
           {estado === "conectando" && "Conectando..."}
           {estado === "desconectado" &&
-            "Desconectado — tu servidor no esta corriendo"}
+            "Desconectado — el servidor no responde"}
           {estado === "error" && "Error de conexión — revisá la consola"}
         </p>
         <h3 style={{ color: "#4b5563", marginBottom: "20px" }}>
