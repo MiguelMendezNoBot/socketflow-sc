@@ -31,9 +31,11 @@ export function useWebSocket(initialUsername?: string) {
     if (!initialUsername) return;
 
     console.log("Creando websocket para:", initialUsername);
-    const wsUrl =
-      import.meta.env.VITE_WS_URL ??
-      `ws://${window.location.hostname}:3000`;
+    const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const defaultWsUrl = `${protocol}//${window.location.hostname}${isLocal ? ":3000" : ""}`;
+
+    const wsUrl = import.meta.env.VITE_WS_URL ?? defaultWsUrl;
     
     // Agregamos el nombre a la URL
     const ws = new WebSocket(`${wsUrl}?username=${encodeURIComponent(initialUsername)}`);

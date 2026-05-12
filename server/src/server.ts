@@ -4,6 +4,12 @@ import WebSocket, { WebSocketServer } from 'ws'
 import url from 'url'
 
 const app = express()
+
+// Middleware para permitir que los popups de Google Auth funcionen correctamente (COOP)
+app.use((_req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  next();
+});
 const httpServer = createServer(app)
 const wss = new WebSocketServer({ server: httpServer })
 
