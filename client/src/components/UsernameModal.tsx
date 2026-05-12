@@ -1,8 +1,9 @@
-// TODO: HU-07 — modal inicial para que el usuario ingrese su nombre
-// - campo de texto para el nombre
-// - botón de confirmar
-// - si está vacío, el servidor asignará un nombre temporal
-
+/**
+ * Muestra una ventana modal superpuesta para requerir la identificación del usuario.
+ * Soporta ingreso manual y, si la API de Google está disponible, inicio de sesión de Google.
+ * 
+ * @param props.onConectar Función de callback para establecer la conexión con el nombre ingresado.
+ */
 import React, { useState } from 'react';
 
 interface Props {
@@ -12,7 +13,13 @@ interface Props {
 const UsernameModal: React.FC<Props> = ({ onConectar }) => {
   const [nombre, setNombre] = useState('');
 
-  // Decodificar el token de Google (JWT) sin librerías
+  /**
+   * Decodifica de forma segura un token JWT (como los provistos por Google)
+   * extrayendo su carga útil (payload) en formato JSON.
+   * 
+   * @param token Token JWT a decodificar.
+   * @returns El objeto JSON decodificado o null si ocurre un error.
+   */
   const decodeGoogleToken = (token: string) => {
     try {
       const base64Url = token.split('.')[1];
@@ -48,6 +55,10 @@ const UsernameModal: React.FC<Props> = ({ onConectar }) => {
     }
   }, [onConectar]);
 
+  /**
+   * Maneja el envío del formulario de identificación manual, validando
+   * que el nombre no esté en blanco antes de proceder.
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const nombreFinal = nombre.trim();

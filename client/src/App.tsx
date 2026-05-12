@@ -6,6 +6,10 @@ import UsernameModal from "./components/UsernameModal";
 import { useState } from "react"; 
 import { useWebSocket } from "./hooks/useWebSocket";
 
+/**
+ * Componente principal de la aplicación que gestiona el estado global,
+ * la autenticación inicial del usuario y la disposición de la interfaz.
+ */
 function App() {
   const [nombreConfirmado, setNombreConfirmado] = useState(false);
   const [chosenName, setChosenName] = useState<string | undefined>(undefined);
@@ -44,7 +48,7 @@ function App() {
       }}
     >
       {" "}
-      {/* CONTENEDOR PRINCIPAL */}
+      {/* Estructura principal del contenedor de la aplicación */}
       <div
         style={{
           width: "100%",
@@ -97,7 +101,7 @@ function App() {
         </h3>
 
           <button 
-             onClick={() => { // boton de historial
+             onClick={() => { // Acción para cargar y conmutar visibilidad del historial
 
               cargarHistorial();
 
@@ -122,7 +126,7 @@ function App() {
               ? "Ocultar historial"
               : "Cargar historial"}
           </button>
-               {/* CHAT */}
+               {/* Sección de visualización del chat e historial */}
         <div
           style={{
             backgroundColor: "#f9fafb",
@@ -166,4 +170,3 @@ function App() {
 }
 
 export default App;
-// chat

@@ -1,7 +1,8 @@
-// TODO: HU-08 — campo de texto y botón de enviar
-// - no enviar mensajes vacíos
-// - limpiar el campo después de enviar
-// - enviar con Enter o con el botón
+/**
+ * Renderiza el componente para el ingreso y envío de nuevos mensajes.
+ * 
+ * @param props.onSend Función de callback ejecutada al enviar el mensaje.
+ */
 import { useState } from "react";
 
 interface Props {
@@ -11,12 +12,20 @@ interface Props {
 export default function MessageInput({ onSend }: Props) {
   const [mensaje, setMensaje] = useState("");
 
+  /**
+   * Valida el contenido del mensaje y lo envía si no está vacío,
+   * limpiando posteriormente el campo de texto.
+   */
   const enviar = () => {
     if (mensaje.trim() === "") return;
 
     onSend(mensaje);
     setMensaje("");
   };
+  /**
+   * Captura eventos del teclado, permitiendo el envío del mensaje
+   * al presionar la tecla Enter sin la tecla Shift.
+   */
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {/*todo esto se aumento por claude */
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();// añadio chatgpt para no tenerrepetidos

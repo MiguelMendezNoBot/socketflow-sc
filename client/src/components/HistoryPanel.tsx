@@ -4,6 +4,12 @@ interface Props {
   historial: Mensaje[];
 }
 
+/**
+ * Renderiza un panel lateral que muestra el historial persistente de mensajes
+ * recuperado desde el servidor.
+ *
+ * @param props.historial Arreglo de mensajes previos a mostrar en el panel.
+ */
 export default function HistoryPanel({
   historial,
 }: Props) {
